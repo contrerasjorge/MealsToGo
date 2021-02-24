@@ -23,3 +23,8 @@ lerna-debug.log*
 # random
 .metals/
 .vscode/
+
+*/node_modules/**/*
+firebase-debug.log
+ui-debug.log
+.runtimeconfig.json
