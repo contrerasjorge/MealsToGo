@@ -114,6 +114,3 @@ export const SettingsScreen = ({ navigation }) => {
     </SettingsBackground>
   );
 };
-
-  );
-};
