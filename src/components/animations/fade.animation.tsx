@@ -2,7 +2,6 @@ import React, { useRef, useEffect } from "react";
 import { Animated } from "react-native";
 
 interface FadeInViewProps {
-  // [x: string]: JSX.Element;
   duration: number;
   [x: string]: any;
 }
