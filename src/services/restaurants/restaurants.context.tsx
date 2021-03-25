@@ -1,5 +1,6 @@
 import React, { useState, useContext, createContext, useEffect } from "react";
 
+//import { RestaurantType } from "../../features/restaurants/components/restaurant.type";
 import {
   restaurantsRequest,
   restaurantsTransform,
@@ -7,7 +8,7 @@ import {
 
 import { LocationContext } from "../location/location.context";
 
-export const RestaurantsContext = createContext();
+export const RestaurantsContext = createContext({});
 
 export const RestaurantsContextProvider = ({ children }) => {
   const [restaurants, setRestaurants] = useState([]);
@@ -15,7 +16,7 @@ export const RestaurantsContextProvider = ({ children }) => {
   const [error, setError] = useState(null);
   const { location } = useContext(LocationContext);
 
-  const retrieveRestaurants = (loc) => {
+  const retrieveRestaurants = (loc: string) => {
     setIsLoading(true);
     setRestaurants([]);
 

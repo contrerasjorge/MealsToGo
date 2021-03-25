@@ -29,12 +29,12 @@ const isAndroid = Platform.OS === "android";
 
 type CompactRestaurantInfoType = {
   restaurant: RestaurantType;
-  isMap: boolean;
+  isMap?: boolean;
 };
 
 export const CompactRestaurantInfo: React.FC<CompactRestaurantInfoType> = ({
   restaurant,
-  isMap,
+  isMap = false,
 }) => {
   // the issue appears to be with WebView and its types
   const Image = isAndroid && isMap ? CompactWebview : CompactImage;

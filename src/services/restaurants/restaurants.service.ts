@@ -1,14 +1,22 @@
 import camelize from "camelize";
-import { host, isMock } from "../../utils/env";
 
-export const restaurantsRequest = (location) => {
-  // return fetch(`${host}/placesNearby?location=${location}`).then((res) =>
+import { RestaurantType } from "../../features/restaurants/components/restaurant.type";
+import { host, isMock } from "../../utils/env";
+import { RestaurantShape } from "../../../types/restaurant.types";
+
+export const restaurantsRequest = (
+  location: string
+): Promise<RestaurantType> => {
   return fetch(
     `${host}/placesNearby?location=${location}&mock=${isMock}`
   ).then((res) => res.json());
 };
 
-export const restaurantsTransform = ({ results = [] }) => {
+export const restaurantsTransform = ({
+  results = [],
+}: {
+  results: RestaurantShape[];
+}): RestaurantType => {
   const mappedResults = results.map((restaurant) => {
     return {
       ...restaurant,

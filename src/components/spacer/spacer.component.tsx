@@ -1,11 +1,11 @@
 import React from "react";
 import styled, { useTheme, DefaultTheme } from "styled-components/native";
 
-type sizeVariantType = {
-  [key: string]: number;
+type SizeVariantType<T> = {
+  [key: string]: T;
 };
 
-const sizeVariant: sizeVariantType = {
+const sizeVariant: SizeVariantType<number> = {
   small: 1,
   medium: 2,
   large: 3,
@@ -13,11 +13,7 @@ const sizeVariant: sizeVariantType = {
   xxl: 5,
 };
 
-type positionVariantType = {
-  [key: string]: string;
-};
-
-const positionVariant: positionVariantType = {
+const positionVariant: SizeVariantType<string> = {
   top: "marginTop",
   left: "marginLeft",
   right: "marginRight",
