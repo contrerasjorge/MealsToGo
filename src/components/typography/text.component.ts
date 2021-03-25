@@ -1,5 +1,6 @@
 import styled from "styled-components/native";
 import { theme as ThemeTypes } from "../../infrastructure/theme";
+import { TextStyle } from "react-native";
 
 const defaultTextStyles = (theme: typeof ThemeTypes) => `
   font-family: ${theme.fonts.body};
@@ -44,7 +45,7 @@ const variants: variantsType = {
   hint,
 };
 
-interface TextProp {
+interface TextProp extends TextStyle {
   theme: typeof ThemeTypes;
   variant: string;
 }
