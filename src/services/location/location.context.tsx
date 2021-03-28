@@ -4,17 +4,23 @@ import { locationRequest, locationTransform } from "./location.service";
 
 export const LocationContext = createContext({});
 
-type LocationType = {
-  lat: string;
-  lng: string;
-  viewport: string;
-};
+interface LatLng {
+  lat: number;
+  lng: number;
+}
+
+interface LocationShape extends LatLng {
+  viewport: {
+    northeast: LatLng;
+    southwest: LatLng;
+  };
+}
 
 export const LocationContextProvider: React.FC<React.ReactNode> = ({
   children,
 }) => {
   const [keyword, setKeyword] = useState("San Francisco");
-  const [location, setLocation] = useState<LocationType | null>(null);
+  const [location, setLocation] = useState<LocationShape | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
