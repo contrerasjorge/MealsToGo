@@ -4,9 +4,22 @@ import { host } from "../../utils/env";
 
 const stripe = createStripe("pk_test_ey5xuA7QGcFHQs5Gf7BCi0SL005Kmm7t36");
 
-export const cardTokenRequest = (card) => stripe.createToken({ card });
+type CardType = {
+  number: number;
+  exp_month: string;
+  exp_year: string;
+  cvc: string;
+  name: string;
+};
 
-export const payRequest = (token, amount, name) => {
+export const cardTokenRequest = (card: CardType): Promise<any> =>
+  stripe.createToken({ card });
+
+export const payRequest = (
+  token: any,
+  amount: number,
+  name: string
+): Promise<any> => {
   return fetch(`${host}/pay`, {
     body: JSON.stringify({
       token,
