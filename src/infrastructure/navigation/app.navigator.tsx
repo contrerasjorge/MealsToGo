@@ -1,5 +1,6 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+//import { DefaultNavigatorOptions } from "@react-navigation/core";
 import { Ionicons } from "@expo/vector-icons";
 
 import { RestaurantsNavigator } from "./restaurants.navigator";
@@ -15,17 +16,28 @@ import { colors } from "../theme/colors";
 
 const Tab = createBottomTabNavigator();
 
-const TAB_ICON = {
+type TabIconType = {
+  [key: string]: iconType;
+};
+
+type iconType = "md-restaurant" | "md-map" | "md-settings" | "md-cart";
+type RouteType = {
+  route: {
+    name: string;
+  };
+};
+
+const TAB_ICON: TabIconType = {
   Restaurants: "md-restaurant",
   Map: "md-map",
   Settings: "md-settings",
   Checkout: "md-cart",
 };
 
-const createScreenOptions = ({ route }) => {
-  const iconName = TAB_ICON[route.name];
+const createScreenOptions = ({ route }: RouteType) => {
+  const iconName: iconType = TAB_ICON[route.name];
   return {
-    tabBarIcon: ({ size, color }) => (
+    tabBarIcon: ({ size, color }: { size: number; color: string }) => (
       <Ionicons name={iconName} size={size} color={color} />
     ),
   };
