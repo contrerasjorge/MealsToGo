@@ -1,16 +1,23 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { RestaurantType } from "../../features/restaurants/components/restaurant.type";
 import { AuthenticationContext } from "../../services/authentication/authentication.context";
 
-export const FavoritesContext = createContext();
+export const FavoritesContext = createContext({});
 
-export const FavoritesContextProvider = ({ children }) => {
+export const FavoritesContextProvider: React.FC<React.ReactNode> = ({
+  children,
+}) => {
   const { user } = useContext(AuthenticationContext);
+  const cartUser = user as firebase.UserInfo;
 
-  const [favorites, setFavorites] = useState([]);
+  const [favorites, setFavorites] = useState<RestaurantType[]>([]);
 
-  const saveFavorites = async (value, uid) => {
+  const saveFavorites = async (
+    value: RestaurantType[] | string,
+    uid: string
+  ) => {
     try {
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem(`@favorites-${uid}`, jsonValue);
@@ -19,7 +26,7 @@ export const FavoritesContextProvider = ({ children }) => {
     }
   };
 
-  const loadFavorites = async (uid) => {
+  const loadFavorites = async (uid: string) => {
     try {
       const value = await AsyncStorage.getItem(`@favorites-${uid}`);
       if (value !== null) {
@@ -30,11 +37,11 @@ export const FavoritesContextProvider = ({ children }) => {
     }
   };
 
-  const add = (restaurant) => {
+  const add = (restaurant: RestaurantType) => {
     setFavorites([...favorites, restaurant]);
   };
 
-  const remove = (restaurant) => {
+  const remove = (restaurant: RestaurantType) => {
     const newFavorites = favorites.filter(
       (x) => x.placeId !== restaurant.placeId
     );
@@ -43,16 +50,16 @@ export const FavoritesContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (user && user.uid) {
-      loadFavorites(user.uid);
+    if (cartUser && cartUser.uid) {
+      loadFavorites(cartUser.uid);
     }
-  }, [user]);
+  }, [cartUser]);
 
   useEffect(() => {
-    if (user && user.uid && favorites.length) {
-      saveFavorites(favorites, user.uid);
+    if (cartUser && cartUser.uid && favorites.length) {
+      saveFavorites(favorites, cartUser.uid);
     }
-  }, [favorites, user]);
+  }, [favorites, cartUser]);
 
   return (
     <FavoritesContext.Provider
