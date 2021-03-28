@@ -1,19 +1,30 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+import { RestaurantType } from "../../features/restaurants/components/restaurant.type";
 import { AuthenticationContext } from "../authentication/authentication.context";
 
-export const CartContext = createContext();
+export const CartContext = createContext({});
 
-export const CartContextProvider = ({ children }) => {
+type CartType = {
+  item: string;
+  price: number;
+};
+
+export const CartContextProvider: React.FC<any> = ({ children }) => {
   const { user } = useContext(AuthenticationContext);
+  const cartUser = user as firebase.UserInfo;
 
-  const [cart, setCart] = useState([]);
-  const [restaurant, setRestaurant] = useState(null);
+  const [cart, setCart] = useState<CartType[]>([]);
+  const [restaurant, setRestaurant] = useState<RestaurantType | null>(null);
 
   const [sum, setSum] = useState(0);
 
-  const saveCart = async (rst, crt, uid) => {
+  const saveCart = async (
+    rst: RestaurantType,
+    crt: CartType[],
+    uid: string
+  ) => {
     try {
       const jsonValue = JSON.stringify({ restaurant: rst, cart: crt });
       await AsyncStorage.setItem(`@cart-${uid}`, jsonValue);
@@ -22,7 +33,7 @@ export const CartContextProvider = ({ children }) => {
     }
   };
 
-  const loadCart = async (uid) => {
+  const loadCart = async (uid: string) => {
     try {
       const value = await AsyncStorage.getItem(`@cart-${uid}`);
       if (value !== null) {
@@ -36,16 +47,18 @@ export const CartContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    if (user && user.uid) {
-      loadCart(user.uid);
+    if (cartUser && cartUser.uid) {
+      loadCart(cartUser.uid);
     }
-  }, [user]);
+  }, [cartUser]);
 
   useEffect(() => {
-    if (user && user.uid) {
-      saveCart(restaurant, cart, user.uid);
+    if (cartUser && cartUser.uid) {
+      if (restaurant) {
+        saveCart(restaurant, cart, cartUser.uid);
+      }
     }
-  }, [restaurant, cart, user]);
+  }, [restaurant, cart, cartUser]);
 
   useEffect(() => {
     if (!cart.length) {
@@ -58,7 +71,7 @@ export const CartContextProvider = ({ children }) => {
     setSum(newSum);
   }, [cart]);
 
-  const add = (item, rst) => {
+  const add = (item: CartType, rst: RestaurantType) => {
     if (!restaurant || restaurant.placeId !== rst.placeId) {
       setRestaurant(rst);
       setCart([item]);

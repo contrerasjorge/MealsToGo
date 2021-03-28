@@ -3,9 +3,9 @@ import * as firebase from "firebase";
 
 import { loginRequest } from "./authentication.service";
 
-type AuthenticationContextType = {
+export type AuthenticationContextType = {
   isAuthenticated: boolean;
-  user: firebase.UserInfo | firebase.User | firebase.auth.UserCredential | null;
+  user: firebase.UserInfo | firebase.auth.UserCredential | null;
   isLoading: boolean;
   error: string | null;
   onLogin?: (email: string, password: string) => void;
@@ -24,10 +24,12 @@ export const AuthenticationContext = createContext<AuthenticationContextType>({
   error: null,
 });
 
-export const AuthenticationContextProvider: React.FC<any> = ({ children }) => {
+export const AuthenticationContextProvider: React.FC<AuthenticationContextType> = ({
+  children,
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState<
-    firebase.UserInfo | firebase.User | firebase.auth.UserCredential | null
+    firebase.UserInfo | firebase.auth.UserCredential | null
   >(null);
   const [error, setError] = useState<string | null>(null);
 
