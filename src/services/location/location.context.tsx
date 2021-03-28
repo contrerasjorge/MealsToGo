@@ -2,13 +2,21 @@ import React, { useState, useEffect, createContext } from "react";
 
 import { locationRequest, locationTransform } from "./location.service";
 
-export const LocationContext = createContext();
+export const LocationContext = createContext({});
 
-export const LocationContextProvider = ({ children }) => {
+type LocationType = {
+  lat: string;
+  lng: string;
+  viewport: string;
+};
+
+export const LocationContextProvider: React.FC<React.ReactNode> = ({
+  children,
+}) => {
   const [keyword, setKeyword] = useState("San Francisco");
-  const [location, setLocation] = useState(null);
+  const [location, setLocation] = useState<LocationType | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!keyword.length) {
@@ -28,7 +36,7 @@ export const LocationContextProvider = ({ children }) => {
       });
   }, [keyword]);
 
-  const onSearch = (searchKeyword) => {
+  const onSearch = (searchKeyword: string) => {
     setIsLoading(true);
     setKeyword(searchKeyword);
   };
